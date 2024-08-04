@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Provision essential AWS resources for the term project to support data management ,storage needs, logical operation, ensuring a streamlined deployment of infrastructure components.
+
+Resources:
+  # DynamoDB Tables
+  UsersTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: users-test
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes:
+        - IndexName: email-index
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  TasksTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: tasks-test
+      AttributeDefinitions:
+        - AttributeName: task_id
+          AttributeType: S
+        - AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: task_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes:
+        - IndexName: user_id-index
+          KeySchema:
+            - AttributeName: user_id
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  # S3 Buckets
+  UsersIdBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: users-id-bucket-test
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  UsersSelfieBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: users-selfie-bucket-test
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+Outputs:
+  UsersTableArn:
+    Description: ARN of the "users" DynamoDB table
+    Value: !GetAtt UsersTable.Arn
+
+  TasksTableArn:
+    Description: ARN of the "tasks" DynamoDB table
+    Value: !GetAtt TasksTable.Arn
+
+  UsersIdBucketArn:
+    Description: ARN of the "users-id-bucket" S3 bucket
+    Value: !GetAtt UsersIdBucket.Arn
+
+  UsersSelfieBucketArn:
+    Description: ARN of the "users-selfie-bucket" S3 bucket
+    Value: !GetAtt UsersSelfieBucket.Arn

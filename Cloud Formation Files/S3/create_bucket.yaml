@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Create two S3 buckets named "users-id-bucket" and "users-selfie-bucket"
+
+Resources:
+  UsersIdBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: users-id-bucket-test
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  UsersSelfieBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: users-selfie-bucket-test
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
