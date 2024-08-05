@@ -5,7 +5,7 @@ Resources:
   UsersIdBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: users-id-bucket-test
+      BucketName: users-id-bucket
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -15,7 +15,7 @@ Resources:
   UsersSelfieBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: users-selfie-bucket-test
+      BucketName: users-selfie-bucket
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
