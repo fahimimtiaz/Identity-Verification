@@ -7,7 +7,7 @@ Resources:
   UsersTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: users-test
+      TableName: users-test  # Todo: make TableName users from users-test
       AttributeDefinitions:
         - AttributeName: user_id
           AttributeType: S
@@ -28,7 +28,7 @@ Resources:
   TasksTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: tasks-test
+      TableName: tasks-test  # Todo: make TableName tasks from tasks-test
       AttributeDefinitions:
         - AttributeName: task_id
           AttributeType: S
