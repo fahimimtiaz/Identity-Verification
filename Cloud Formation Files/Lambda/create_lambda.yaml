@@ -1,6 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Resources:
+#  --------------------------------------Lambda Dependency for Package (PyJWT and JWT)----------------------------------
+
   LambdaDependencyLayer:
     Type: AWS::Lambda::LayerVersion
     Properties:
@@ -12,7 +14,7 @@ Resources:
       CompatibleRuntimes:
         - python3.8
 
-#  --------------------------------------Lambda Function-------------------------------------
+#  --------------------------------------------------Lambda Function----------------------------------------------------
   UserRegistrationFunction:
     Type: AWS::Lambda::Function
     Properties:
@@ -838,7 +840,7 @@ Resources:
       EphemeralStorage:
         Size: 512  # Size in MB
 
-#  --------------------------------------API Gateway-------------------------------------
+#  ----------------------------------------------------API Gateway------------------------------------------------------
 
   UserRegistrationApiGateway:
     Type: AWS::ApiGateway::RestApi
@@ -885,7 +887,7 @@ Resources:
         Types:
           - REGIONAL
 
-#  --------------------------------------API Gateway Resource-------------------------------------
+#  -------------------------------------------------------API Gateway Resource------------------------------------------
 
   UserRegistrationApiGatewayResource:
     Type: AWS::ApiGateway::Resource
@@ -923,7 +925,7 @@ Resources:
       PathPart: task
       RestApiId: !Ref UserTaskManagementApiGateway
 
-#  --------------------------------------API Gateway Method-------------------------------------
+#  --------------------------------------------------API Gateway Method-------------------------------------------------
 
   UserRegistrationApiGatewayMethod:
     Type: AWS::ApiGateway::Method
@@ -1034,7 +1036,7 @@ Resources:
         - StatusCode: 401
         - StatusCode: 500
 
-#  --------------------------------------API Gateway Method(For CORS)-------------------------------------
+#  ------------------------------------------------API Gateway Method(For CORS)-----------------------------------------
 
   UserRegistrationApiGatewayOptionsMethod:
     Type: AWS::ApiGateway::Method
@@ -1157,7 +1159,7 @@ Resources:
             method.response.header.Access-Control-Allow-Origin: "'*'"
 
 
-#  --------------------------------------API Gateway Deployment-------------------------------------
+#  -----------------------------------------------API Gateway Deployment------------------------------------------------
 
   UserRegistrationApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
@@ -1207,7 +1209,7 @@ Resources:
       RestApiId: !Ref UserTaskManagementApiGateway
       StageName: dev
 
-#  --------------------------------------API Gateway Invoke Permission-------------------------------------
+#  ------------------------------------------------API Gateway Invoke Permission----------------------------------------
 
   LambdaUserRegistrationApiGatewayInvokePermission:
     Type: AWS::Lambda::Permission
@@ -1249,7 +1251,7 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${UserTaskManagementApiGateway}/dev/*/*
 
-#  --------------------------------------Output-------------------------------------
+#  ------------------------------------------------Output---------------------------------------------------------------
 
 Outputs:
   UserRegistrationApiUrl:
