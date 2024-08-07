@@ -913,7 +913,7 @@ Resources:
   ApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: IdentityVerificationAPI
+      Name: "IdentityVerificationAPI's"
       Description: Common API Gateway for User Verification and Task Functions
       EndpointConfiguration:
         Types:
