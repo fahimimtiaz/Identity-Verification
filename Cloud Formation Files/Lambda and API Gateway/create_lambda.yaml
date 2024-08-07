@@ -840,92 +840,55 @@ Resources:
       EphemeralStorage:
         Size: 512  # Size in MB
 
-#  ----------------------------------------------------API Gateway------------------------------------------------------
+#  ------------------------------------------------API Gateway----------------------------------------------------------
 
-  UserRegistrationApiGateway:
+  ApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: UserRegistrationAPI
-      Description: API Gateway for User Login Registration
+      Name: "IdentityVerificationAPI's"
+      Description: Common API Gateway for User Verification and Task Functions
       EndpointConfiguration:
         Types:
           - REGIONAL
 
-  UserLoginApiGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: UserLoginAPI
-      Description: API Gateway for User Login Function
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-
-  UserSelfieUploadApiGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: UserSelfieUploadAPI
-      Description: API Gateway for User Selfie Upload Function
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-
-  UserDetailApiGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: UserDetailAPI
-      Description: API Gateway for User Detail Function
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-
-  UserTaskManagementApiGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: UserTaskManagementAPI
-      Description: API Gateway for User Task Management Function
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
-
-#  -------------------------------------------------------API Gateway Resource------------------------------------------
+  #  -------------------------------------------------API Gateway Resource------------------------------------------------
 
   UserRegistrationApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt UserRegistrationApiGateway.RootResourceId
+      ParentId: !GetAtt ApiGateway.RootResourceId
       PathPart: user-registration
-      RestApiId: !Ref UserRegistrationApiGateway
+      RestApiId: !Ref ApiGateway
 
   UserLoginApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt UserLoginApiGateway.RootResourceId
+      ParentId: !GetAtt ApiGateway.RootResourceId
       PathPart: user-login
-      RestApiId: !Ref UserLoginApiGateway
+      RestApiId: !Ref ApiGateway
 
   UserSelfieUploadApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt UserSelfieUploadApiGateway.RootResourceId
+      ParentId: !GetAtt ApiGateway.RootResourceId
       PathPart: selfie-upload
-      RestApiId: !Ref UserSelfieUploadApiGateway
-
+      RestApiId: !Ref ApiGateway
 
   UserDetailApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt UserDetailApiGateway.RootResourceId
+      ParentId: !GetAtt ApiGateway.RootResourceId
       PathPart: user-details
-      RestApiId: !Ref UserDetailApiGateway
+      RestApiId: !Ref ApiGateway
 
   UserTaskManagementApiGatewayResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      ParentId: !GetAtt UserTaskManagementApiGateway.RootResourceId
+      ParentId: !GetAtt ApiGateway.RootResourceId
       PathPart: task
-      RestApiId: !Ref UserTaskManagementApiGateway
+      RestApiId: !Ref ApiGateway
 
-#  --------------------------------------------------API Gateway Method-------------------------------------------------
+#  -------------------------------------------------API Gateway Method--------------------------------------------------
 
   UserRegistrationApiGatewayMethod:
     Type: AWS::ApiGateway::Method
@@ -933,7 +896,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: POST
       ResourceId: !Ref UserRegistrationApiGatewayResource
-      RestApiId: !Ref UserRegistrationApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -955,7 +918,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: POST
       ResourceId: !Ref UserLoginApiGatewayResource
-      RestApiId: !Ref UserLoginApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -977,7 +940,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: POST
       ResourceId: !Ref UserSelfieUploadApiGatewayResource
-      RestApiId: !Ref UserSelfieUploadApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -999,7 +962,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: POST
       ResourceId: !Ref UserDetailApiGatewayResource
-      RestApiId: !Ref UserDetailApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -1021,7 +984,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: ANY
       ResourceId: !Ref UserTaskManagementApiGatewayResource
-      RestApiId: !Ref UserTaskManagementApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -1044,7 +1007,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: OPTIONS
       ResourceId: !Ref UserRegistrationApiGatewayResource
-      RestApiId: !Ref UserRegistrationApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationResponses:
           - StatusCode: 200
@@ -1068,7 +1031,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: OPTIONS
       ResourceId: !Ref UserLoginApiGatewayResource
-      RestApiId: !Ref UserLoginApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationResponses:
           - StatusCode: 200
@@ -1092,7 +1055,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: OPTIONS
       ResourceId: !Ref UserSelfieUploadApiGatewayResource
-      RestApiId: !Ref UserSelfieUploadApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationResponses:
           - StatusCode: 200
@@ -1116,7 +1079,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: OPTIONS
       ResourceId: !Ref UserDetailApiGatewayResource
-      RestApiId: !Ref UserDetailApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationResponses:
           - StatusCode: 200
@@ -1140,7 +1103,7 @@ Resources:
       AuthorizationType: NONE
       HttpMethod: OPTIONS
       ResourceId: !Ref UserTaskManagementApiGatewayResource
-      RestApiId: !Ref UserTaskManagementApiGateway
+      RestApiId: !Ref ApiGateway
       Integration:
         IntegrationResponses:
           - StatusCode: 200
@@ -1158,58 +1121,26 @@ Resources:
             method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST,GET,PUT,DELETE,PATCH'"
             method.response.header.Access-Control-Allow-Origin: "'*'"
 
-
 #  -----------------------------------------------API Gateway Deployment------------------------------------------------
 
-  UserRegistrationApiGatewayDeployment:
+  ApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
       - UserRegistrationApiGatewayMethod
       - UserRegistrationApiGatewayOptionsMethod
-    Properties:
-      RestApiId: !Ref UserRegistrationApiGateway
-      StageName: dev
-
-  UserLoginApiGatewayDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
       - UserLoginApiGatewayMethod
       - UserLoginApiGatewayOptionsMethod
-    Properties:
-      RestApiId: !Ref UserLoginApiGateway
-      StageName: dev
-
-
-  UserSelfieUploadApiGatewayDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
       - UserSelfieUploadApiGatewayMethod
       - UserSelfieUploadApiGatewayOptionsMethod
-    Properties:
-      RestApiId: !Ref UserSelfieUploadApiGateway
-      StageName: dev
-
-
-  UserDetailApiGatewayDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
       - UserDetailApiGatewayMethod
       - UserDetailApiGatewayOptionsMethod
-    Properties:
-      RestApiId: !Ref UserDetailApiGateway
-      StageName: dev
-
-
-  UserTaskManagementApiGatewayDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
       - UserTaskManagementApiGatewayMethod
       - UserTaskManagementApiGatewayOptionsMethod
     Properties:
-      RestApiId: !Ref UserTaskManagementApiGateway
+      RestApiId: !Ref ApiGateway
       StageName: dev
 
-#  ------------------------------------------------API Gateway Invoke Permission----------------------------------------
+#  -----------------------------------------------API Gateway Invoke Permission-----------------------------------------
 
   LambdaUserRegistrationApiGatewayInvokePermission:
     Type: AWS::Lambda::Permission
@@ -1217,7 +1148,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref UserRegistrationFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${UserRegistrationApiGateway}/dev/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/dev/*/*
 
   LambdaUserLoginApiGatewayInvokePermission:
     Type: AWS::Lambda::Permission
@@ -1225,7 +1156,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref UserLoginFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${UserLoginApiGateway}/dev/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/dev/*/*
 
   LambdaUserSelfieUploadApiGatewayInvokePermission:
     Type: AWS::Lambda::Permission
@@ -1233,7 +1164,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref UserSelfieUploadFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${UserSelfieUploadApiGateway}/dev/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/dev/*/*
 
   LambdaUserDetailApiGatewayInvokePermission:
     Type: AWS::Lambda::Permission
@@ -1241,7 +1172,7 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref UserDetailFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${UserDetailApiGateway}/dev/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/dev/*/*
 
   LambdaUserTaskManagementApiGatewayInvokePermission:
     Type: AWS::Lambda::Permission
@@ -1249,27 +1180,31 @@ Resources:
       Action: lambda:InvokeFunction
       FunctionName: !Ref UserTaskManagementFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${UserTaskManagementApiGateway}/dev/*/*
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/dev/*/*
 
-#  ------------------------------------------------Output---------------------------------------------------------------
+#  ---------------------------------------------------------Output------------------------------------------------------
 
 Outputs:
+  BaseUrl:
+    Description: "BASE URL"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev"
+
   UserRegistrationApiUrl:
     Description: "URL of the User Registration API Gateway"
-    Value: !Sub "https://${UserRegistrationApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-registration"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-registration"
 
   UserLoginApiUrl:
     Description: "URL of the User Login API Gateway"
-    Value: !Sub "https://${UserLoginApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-login"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-login"
 
   UserSelfieUploadApiUrl:
     Description: "URL of the User Selfie Upload API Gateway"
-    Value: !Sub "https://${UserSelfieUploadApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/selfie-upload"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/selfie-upload"
 
   UserDetailApiUrl:
     Description: "URL of the User Detail API Gateway"
-    Value: !Sub "https://${UserDetailApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-details"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-details"
 
   UserTaskManagementApiUrl:
     Description: "URL of the User Task Management API Gateway"
-    Value: !Sub "https://${UserTaskManagementApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/task"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/task"
