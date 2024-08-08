@@ -506,6 +506,7 @@ Resources:
           def lambda_handler(event, context):
               table = dynamodb.Table('users')
               selfie_bucket = 'users-selfie-bucket'
+              id_bucket = 'users-id-bucket'
               
               user_id, code = validate_auth(event)
               if code:
@@ -537,6 +538,22 @@ Resources:
                       user_data['selfie_url'] = None
                   else:
                       return generate_response(500, f'Error checking selfie existence: {e}')
+              
+              
+              # Check if the nid exists in S3
+              try:
+                  s3.head_object(Bucket=id_bucket, Key=f'{user_id}.jpg')
+                  id_url = s3.generate_presigned_url(
+                      'get_object',
+                      Params={'Bucket': id_bucket, 'Key': f'{user_id}.jpg'},
+                      ExpiresIn=3600
+                  )
+                  user_data['id_url'] = id_url
+              except ClientError as e:
+                  if e.response['Error']['Code'] == '404':
+                      user_data['id_url'] = None
+                  else:
+                      return generate_response(500, f'Error checking id existence: {e}')
           
               return generate_response(200, 'User data retrieved successfully', user_data)
 
