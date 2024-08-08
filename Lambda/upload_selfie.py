@@ -90,8 +90,8 @@ def delete_topic(topic_arn):
     
 def lambda_handler(event, context):
     table = dynamodb.Table('users')
-    selfie_bucket = 'users-selfie-bucket'
-    id_bucket = 'users-id-bucket'
+    selfie_bucket = '5409-users-selfie-bucket'
+    id_bucket = '5409-users-id-bucket'
 
     user_id, code = validate_auth(event)
     if code:

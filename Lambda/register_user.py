@@ -50,7 +50,7 @@ def validate_payload(user_data):
 
 def lambda_handler(event, context):
     table = dynamodb.Table('users')
-    user_id_bucket = 'users-id-bucket'
+    user_id_bucket = '5409-users-id-bucket'
 
     user_data = json.loads(event['body'])
     # Validate payload
