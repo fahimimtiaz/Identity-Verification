@@ -245,7 +245,7 @@ Resources:
 
       Layers:
         - !Ref LambdaDependencyLayer
-      Role: arn:aws:iam::808055808273:role/LabRole
+      Role: arn:aws:iam::837364356508:role/LabRole
       MemorySize: 512
       Timeout: 60  # Timeout in seconds
       EphemeralStorage:
@@ -334,7 +334,7 @@ Resources:
 
       Layers:
         - !Ref LambdaDependencyLayer
-      Role: arn:aws:iam::808055808273:role/LabRole
+      Role: arn:aws:iam::837364356508:role/LabRole
       MemorySize: 512
       Timeout: 60  # Timeout in seconds
       EphemeralStorage:
@@ -515,7 +515,7 @@ Resources:
 
       Layers:
         - !Ref LambdaDependencyLayer
-      Role: arn:aws:iam::808055808273:role/LabRole
+      Role: arn:aws:iam::837364356508:role/LabRole
       MemorySize: 512
       Timeout: 60  # Timeout in seconds
       EphemeralStorage:
@@ -627,7 +627,7 @@ Resources:
 
       Layers:
         - !Ref LambdaDependencyLayer
-      Role: arn:aws:iam::808055808273:role/LabRole
+      Role: arn:aws:iam::837364356508:role/LabRole
       MemorySize: 512
       Timeout: 60  # Timeout in seconds
       EphemeralStorage:
@@ -919,7 +919,7 @@ Resources:
 
       Layers:
         - !Ref LambdaDependencyLayer
-      Role: arn:aws:iam::808055808273:role/LabRole
+      Role: arn:aws:iam::837364356508:role/LabRole
       MemorySize: 512
       Timeout: 60  # Timeout in seconds
       EphemeralStorage:
