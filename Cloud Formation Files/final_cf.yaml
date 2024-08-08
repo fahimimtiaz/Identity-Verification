@@ -52,7 +52,7 @@ Resources:
   UsersIdBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: users-id-bucket-test
+      BucketName: 5409-users-id-bucket
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -62,7 +62,7 @@ Resources:
   UsersSelfieBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: users-selfie-bucket-test
+      BucketName: 5409-users-selfie-bucket
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -143,7 +143,7 @@ Resources:
           
           def lambda_handler(event, context):
               table = dynamodb.Table('users')
-              user_id_bucket = 'users-id-bucket'
+              user_id_bucket = '5409-users-id-bucket'
           
               user_data = json.loads(event['body'])
               # Validate payload
@@ -440,8 +440,8 @@ Resources:
               
           def lambda_handler(event, context):
               table = dynamodb.Table('users')
-              selfie_bucket = 'users-selfie-bucket'
-              id_bucket = 'users-id-bucket'
+              selfie_bucket = '5409-users-selfie-bucket'
+              id_bucket = '5409-users-id-bucket'
           
               user_id, code = validate_auth(event)
               if code:
@@ -573,8 +573,8 @@ Resources:
           
           def lambda_handler(event, context):
               table = dynamodb.Table('users')
-              selfie_bucket = 'users-selfie-bucket'
-              id_bucket = 'users-id-bucket'
+              selfie_bucket = '5409-users-selfie-bucket'
+              id_bucket = '5409-users-id-bucket'
               
               user_id, code = validate_auth(event)
               if code:
