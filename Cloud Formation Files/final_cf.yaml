@@ -7,7 +7,7 @@ Resources:
   UsersTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: users-test  # Todo: make TableName users from users-test
+      TableName: users  # Todo: make TableName users from users-test
       AttributeDefinitions:
         - AttributeName: user_id
           AttributeType: S
@@ -28,7 +28,7 @@ Resources:
   TasksTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: tasks-test  # Todo: make TableName tasks from tasks-test
+      TableName: tasks  # Todo: make TableName tasks from tasks-test
       AttributeDefinitions:
         - AttributeName: task_id
           AttributeType: S
@@ -77,7 +77,7 @@ Resources:
       LayerName: MyLambdaLayer
       Description: A layer for Lambda with PyJWT and jwt
       Content:
-        S3Bucket: identity-verification-dependencies
+        S3Bucket: 5409-identity-verification-dependencies
         S3Key: layer.zip
       CompatibleRuntimes:
         - python3.8
