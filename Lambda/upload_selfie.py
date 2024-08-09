@@ -155,7 +155,13 @@ def lambda_handler(event, context):
                 topic_name=f"SendVerificationInfoTo-{clean_email}",
                 subject='Verification Failed',
                 message=f'Your account verification has failed. Please retry by uploading a better selfie that matches with your ID card photo.'
-            )
+             )
+
+             try:
+                 s3.delete_object(Bucket=selfie_bucket, Key=f'{user_id}.jpg')
+             except ClientError as e:
+                 return generate_response(500, f'Verification failed. Error deleting selfie: {e}')
+
              return generate_response(400, 'Verification failed', {
                 'verification_status': 'Pending'
             })
