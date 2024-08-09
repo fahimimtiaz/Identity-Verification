@@ -1277,7 +1277,7 @@ Resources:
     Type: 'AWS::EC2::Instance'
     Properties:
       InstanceType: t2.micro
-      KeyName: IdentityVerificationFrontend # Create a Key Pair using this Name
+      KeyName: Frontend-ec2-key # Create a Key Pair using this Name
       ImageId: ami-00402f0bdf4996822  # Linux/UNIX - x86_64 - amazon/debian-12-amd64-20240702-1796
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
