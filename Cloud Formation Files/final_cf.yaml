@@ -7,7 +7,7 @@ Resources:
   UsersTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: users  # Todo: make TableName users from users-test
+      TableName: users
       AttributeDefinitions:
         - AttributeName: user_id
           AttributeType: S
@@ -28,7 +28,7 @@ Resources:
   TasksTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
-      TableName: tasks  # Todo: make TableName tasks from tasks-test
+      TableName: tasks
       AttributeDefinitions:
         - AttributeName: task_id
           AttributeType: S
@@ -1267,29 +1267,116 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGateway}/dev/*/*
 
-#  ---------------------------------------------------------Output------------------------------------------------------
+#  ---------------------------------------------------EC2 Instance------------------------------------------------------
 
-Outputs:
-  BaseUrl:
+  ApiGatewayBaseUrl:
     Description: "BASE URL"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev"
 
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      KeyName: IdentityVerificationFrontend # Create a Key Pair using this Name
+      ImageId: ami-00402f0bdf4996822  # Linux/UNIX - x86_64 - amazon/debian-12-amd64-20240702-1796
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash
+          set -x  # Enable debugging    
+
+          # Update package list and install necessary tools
+          apt-get update -y
+
+          # Install Node.js (including npm)
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          apt-get install -y nodejs
+
+          # Install unzip and awscli
+          apt-get install -y unzip awscli
+
+          # Download and unzip the project
+          aws s3 cp s3://5409-frontend-codebase-bucket/frontend.zip /var/www/html/  
+          cd /var/www/html/
+          unzip frontend.zip
+          cd frontend
+
+          # Create and write to the .env file
+          echo 'VITE_BASE_URL="${ApiGatewayBaseUrl}"' > .env
+
+          # Install dependencies
+          npm install
+
+          # Build the project using Vite
+          npm run build
+
+          # Install 'serve' globally
+          npm install -g serve
+
+          # Serve the build directory
+          serve -s dist -l 80
+
+
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Roles:
+        - LabRole
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+#  ---------------------------------------------------------Output------------------------------------------------------
+
+Outputs:
+
+  InstanceId:
+    Description: 'InstanceId of the newly created EC2 instance for Identity Verification Frontend'
+    Value: !Ref EC2Instance
+  PublicIP:
+    Description: 'Public IP address of the EC2 instance'
+    Value: !GetAtt EC2Instance.PublicIp
+  WebURL:
+    Description: 'Application URL'
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt EC2Instance.PublicDnsName
+
+  BaseUrl:
+    Description: "Backend BASE URL"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev"
+
   UserRegistrationApiUrl:
-    Description: "URL of the User Registration API Gateway"
+    Description: "URL of the User Registration API"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-registration"
 
   UserLoginApiUrl:
-    Description: "URL of the User Login API Gateway"
+    Description: "URL of the User Login API"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-login"
 
   UserSelfieUploadApiUrl:
-    Description: "URL of the User Selfie Upload API Gateway"
+    Description: "URL of the User Selfie Upload API"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/selfie-upload"
 
   UserDetailApiUrl:
-    Description: "URL of the User Detail API Gateway"
+    Description: "URL of the User Detail API"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/user-details"
 
   UserTaskManagementApiUrl:
-    Description: "URL of the User Task Management API Gateway"
+    Description: "URL of the User Task Management API"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev/task"

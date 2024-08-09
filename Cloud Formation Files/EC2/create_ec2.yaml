@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  EC2Instance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      KeyName: IdentityVerificationFrontend
+      ImageId: ami-00402f0bdf4996822  # Linux/UNIX - x86_64 - amazon/debian-12-amd64-20240702-1796
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      UserData:
+        Fn::Base64:
+          !Sub |
+          #!/bin/bash
+          set -x  # Enable debugging    
+
+          # Update package list and install necessary tools
+          apt-get update -y
+
+          # Install Node.js (including npm)
+          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+          apt-get install -y nodejs
+
+          # Install unzip and awscli
+          apt-get install -y unzip awscli
+
+          # Download and unzip the project
+          aws s3 cp s3://frontend-bucket-demo/frontend.zip /var/www/html/
+          cd /var/www/html/
+          unzip frontend.zip
+          cd frontend
+          
+          # Create and write to the .env file
+          echo 'VITE_BASE_URL="test.com"' > .env
+
+          # Install dependencies
+          npm install
+
+          # Build the project using Vite
+          npm run build
+
+          # Install 'serve' globally
+          npm install -g serve
+
+          # Serve the build directory
+          serve -s dist -l 80
+
+
+  EC2InstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Roles:
+        - LabRole
+
+  InstanceSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  InstanceId:
+    Description: 'InstanceId of the newly created EC2 instance for Identity Verification Frontend'
+    Value: !Ref EC2Instance
+  PublicIP:
+    Description: 'Public IP address of the EC2 instance'
+    Value: !GetAtt EC2Instance.PublicIp
+  WebURL:
+    Description: 'Application URL'
+    Value: !Join
+      - ''
+      - - 'http://'
+        - !GetAtt EC2Instance.PublicDnsName
