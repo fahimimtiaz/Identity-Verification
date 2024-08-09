@@ -1269,10 +1269,6 @@ Resources:
 
 #  ---------------------------------------------------EC2 Instance------------------------------------------------------
 
-  ApiGatewayBaseUrl:
-    Description: "BASE URL"
-    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev"
-
   EC2Instance:
     Type: 'AWS::EC2::Instance'
     Properties:
@@ -1305,7 +1301,7 @@ Resources:
           cd frontend
 
           # Create and write to the .env file
-          echo 'VITE_BASE_URL="${ApiGatewayBaseUrl}"' > .env
+          echo 'VITE_BASE_URL="https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/dev"' > .env
 
           # Install dependencies
           npm install
