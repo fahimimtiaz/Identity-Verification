@@ -68,11 +68,15 @@ const UserInfoPage = () => {
         <h1 className="text-2xl font-bold mb-6 text-center">User Information</h1>
         <div className="mb-4">
           <p className="text-lg"><strong>Profile Picture:</strong></p>
-          <img src={userInfo.selfie_url} alt="Profile" className="w-32 h-32 rounded-full mx-auto" />
+          {userInfo.selfie_url && (
+            <img src={userInfo.selfie_url} alt="Profile Picture" className="w-32 h-32 rounded-full mx-auto" />
+          )}
         </div>
         <div className="mb-4">
           <p className="text-lg"><strong>ID Card:</strong></p>
-          <img src={userInfo.id_url} alt="Profile" />
+          {userInfo.id_url && (
+            <img src={userInfo.id_url} alt="Id Card" />
+          )}
         </div>
         <div className="mb-4">
           <p className="text-lg"><strong>Full Name:</strong> {userInfo.full_name}</p>

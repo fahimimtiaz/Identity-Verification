@@ -30,21 +30,27 @@ const SelfieUploadPage = () => {
           }
         );
 
-        const verificationStatus = response.data.data.verification_status;
+        const { message, data } = response.data;
 
-        if (verificationStatus === 'Verified') {
-          // Update the userData object with the new verification status
+        if (data.verification_status === 'Verified') {
           const userData = getUserData();
-          userData.verification_status = verificationStatus;
+          userData.verification_status = data.verification_status;
           setUserData(userData);
 
           navigate('/tasks');
+        } else if (message === 'Verification failed') {
+          alert('Verification failed, please try again.');
         } else {
           alert('Selfie upload failed. Please try again.');
         }
       } catch (error) {
         console.error('Error uploading selfie:', error);
-        alert('Selfie upload failed. Please try again.');
+
+        if (error.response && error.response.status === 400) {
+          alert('Verification failed, please try again.');
+        } else {
+          alert('Selfie upload failed. Please try again.');
+        }
       }
     };
   };

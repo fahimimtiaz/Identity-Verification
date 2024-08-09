@@ -36,16 +36,16 @@ const TaskManagementPage = () => {
   }, []);
 
   const handleCreate = async (taskData) => {
-    console.log(taskData);
     try {
       const token = getToken();
       const response = await createTask(taskData, token);
       if (response.status === 200) {
-        setTasks((prevTasks) => ({
-          ...prevTasks,
-          [taskData.priority]: [...prevTasks[taskData.priority], taskData],
-        }));
-        window.location.reload();
+        console.log('Task created:', response.data.data);
+        setTasks((prevTasks) => {
+          const updatedTasks = { ...prevTasks };
+          updatedTasks[taskData.priority].push(response.data.data);
+          return updatedTasks;
+        });
       }
     } catch (error) {
       console.error('Error creating task:', error);
