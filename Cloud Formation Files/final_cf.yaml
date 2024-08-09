@@ -384,7 +384,7 @@ Resources:
               auth_header = event['headers'].get('Authorization')
               if not auth_header:
                   return None, generate_response(401, 'Missing Authorization header')
-          
+              
               token = auth_header.split(' ')[1]
               try:
                   decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
@@ -394,7 +394,7 @@ Resources:
                   return None, generate_response(401, 'Token has expired')
               except jwt.InvalidTokenError:
                   return None, generate_response(401, 'Invalid token')
-          
+              
           def send_email(topic_name, subject, message):
               try:
                   # Check if the SNS topic exists
@@ -404,12 +404,12 @@ Resources:
                       if topic_name in topic['TopicArn']:
                           topic_arn = topic['TopicArn']
                           break
-          
+                  
                   if not topic_arn:
                       # Create a new SNS topic
                       topic_response = sns.create_topic(Name=topic_name)
                       topic_arn = topic_response['TopicArn']
-          
+                  
                   # Publish the message to the SNS topic
                   sns.publish(
                       TopicArn=topic_arn,
@@ -431,7 +431,7 @@ Resources:
                       return None, None
               except ClientError as e:
                   return None, None
-          
+              
           def delete_topic(topic_arn):
               try:
                   sns.delete_topic(TopicArn=topic_arn)
@@ -446,7 +446,7 @@ Resources:
               user_id, code = validate_auth(event)
               if code:
                   return code
-          
+              
               user_data = json.loads(event['body'])
               selfie = user_data['selfie']
           
@@ -457,7 +457,7 @@ Resources:
               
               if selfie_bytes[:3] != b'\xff\xd8\xff':
                   return generate_response(400, 'Decoded bytes are not a valid JPEG image')
-          
+              
               try:
                   s3.put_object(Bucket=selfie_bucket, Key=f'{user_id}.jpg', Body=selfie_bytes, ContentType='image/jpeg')
               except ClientError as e:
@@ -476,7 +476,7 @@ Resources:
                   if not email:
                       return generate_response(500, 'User information not found')
                   clean_email = email.split('@')[0]
-          
+                 
           
                   if response['FaceMatches']:
                       verification_status = 'Verified'
@@ -505,19 +505,20 @@ Resources:
                           topic_name=f"SendVerificationInfoTo-{clean_email}",
                           subject='Verification Failed',
                           message=f'Your account verification has failed. Please retry by uploading a better selfie that matches with your ID card photo.'
-                      )
-                      
-                      try:
-                          s3.delete_object(Bucket=selfie_bucket, Key=f'{user_id}.jpg')
-                      except ClientError as e:
-                          return generate_response(500, f'Verification failed. Error deleting selfie: {e}')
-                      
-                      return generate_response(400, 'Verification failed', {
+                       )
+          
+                       try:
+                           s3.delete_object(Bucket=selfie_bucket, Key=f'{user_id}.jpg')
+                       except ClientError as e:
+                           return generate_response(500, f'Verification failed. Error deleting selfie: {e}')
+          
+                       return generate_response(400, 'Verification failed', {
                           'verification_status': 'Pending'
                       })
-          
+                  
               except ClientError as e:
                   return generate_response(500, f'Error verifying identity: {e}')
+
 
       Layers:
         - !Ref LambdaDependencyLayer
